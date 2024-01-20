@@ -2,6 +2,12 @@
 Wrapping the Asio library to create a simple HTTP client that supports connecting via domain names and IP addresses.
 
 Mac and Linux is supported
+
+# asio模块加载
+```
+git submodule update --init --recursive
+```
+
 # 编译
 ```
 ./build.sh
