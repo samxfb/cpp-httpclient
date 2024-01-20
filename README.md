@@ -3,12 +3,16 @@ Wrapping the Asio library to create a simple HTTP client that supports connectin
 
 Mac and Linux is supported
 # 编译
+```
 ./build.sh
+```
 
 # 运行
+```
 Usage:
 ./cpp-httpclient [ip] [port] [method:GET/POST...] [url/path]
 ./cpp-httpclient --host [host] [method:GET/POST...] [url/path]
+```
 
 # 测试
 借助在线服务（[https://httpbin.org/](https://httpbin.org/)）
