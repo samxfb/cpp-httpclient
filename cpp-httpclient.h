@@ -28,18 +28,23 @@ public:
         std::string                         error;
     };
     
-    static std::shared_ptr<HttpClient> Create(const std::string &host);
-    static std::shared_ptr<HttpClient> Create(const std::string &ip, uint16_t port);
+    // 1. arg is host(string);
+    // 2. args are ip(string) and port(uint16_t);
+    template<typename... Args>
+    static std::shared_ptr<HttpClient> Create(Args&&... args);
+    // static std::shared_ptr<HttpClient> Create(const std::string &host);
+    // static std::shared_ptr<HttpClient> Create(const std::string &ip, uint16_t port);
 
     Response Request(const std::string &method, /***GET/POST/...*/
                     const std::string &url,     /***path...******/
                     const std::map<std::string, std::string> &header = std::map<std::string, std::string>(),
                     const std::string &body = "");
+    
+    ~HttpClient();
 
-public:
+private:
     HttpClient(const std::string &ip, uint16_t port);
     HttpClient(const std::string &host);
-    ~HttpClient();
     void start();
     void stop();
     void async_resolve(void);
@@ -113,14 +118,19 @@ void HttpClient::stop()
     }
 }
 
-std::shared_ptr<HttpClient> HttpClient::Create(const std::string &host)
+template<typename... Args>
+std::shared_ptr<HttpClient> HttpClient::Create(Args&&... args)
 {
-    return std::make_shared<HttpClient>(host);
+    return std::shared_ptr<HttpClient>(new HttpClient(std::forward<Args>(args)...));
 }
-std::shared_ptr<HttpClient> HttpClient::Create(const std::string &ip, uint16_t port)
-{
-    return std::make_shared<HttpClient>(ip, port);
-}
+// std::shared_ptr<HttpClient> HttpClient::Create(const std::string &host)
+// {
+//     return std::shared_ptr<HttpClient>(new HttpClient(host));
+// }
+// std::shared_ptr<HttpClient> HttpClient::Create(const std::string &ip, uint16_t port)
+// {
+//     return std::shared_ptr<HttpClient>(new HttpClient(ip, port));
+// }
 
 void HttpClient::close(void)
 {
